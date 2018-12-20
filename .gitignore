@@ -1,0 +1,5 @@
+.ipynb_checkpoints
+**/__pycache__
+credentials.json
+mail_config.json
+data

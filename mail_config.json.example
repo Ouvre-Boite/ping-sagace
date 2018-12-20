@@ -1,0 +1,8 @@
+{
+    "host": "mymailserver.com",
+    "port": 587,
+    "user": "myusername",
+    "password": "mypassword",
+    "sender": "myusername@mymailserver.com",
+    "recipients": "recipient1@mailserver.com, recipient2@mailserver.com"
+}
