@@ -14,7 +14,7 @@ def get_text_for_lawsuit(court_id, lawsuit_id, lawsuit_password):
     text = soup.get_text()
     lines = (line.strip() for line in text.splitlines())
     text = '\n'.join(line for line in lines if line)
-    
+
     return text
 
 def fetch_lawsuit_data(court_id, lawsuit_id, lawsuit_password):
@@ -41,7 +41,8 @@ def fetch_lawsuit_data(court_id, lawsuit_id, lawsuit_password):
         assert response.status_code == 302
 
         asp_net_session_id = response.headers['Set-Cookie'].split(';')[0]
-        cookie = '{}; persist=85'.format(asp_net_session_id)
+        assert 'persist=401v-80' in response.headers['Set-Cookie']
+        cookie = '{}; persist=401v-80'.format(asp_net_session_id)
 
         return cookie
 
@@ -76,15 +77,16 @@ def fetch_lawsuit_data(court_id, lawsuit_id, lawsuit_password):
             **HEADERS_COMMON,
             'Cookie': cookie,
             'Cache-Control': 'max-age=0',
-            'Content-Length': '317',
+            'Content-Length': '504',
             'Content-Type': 'application/x-www-form-urlencoded',
             'Origin': 'https://sagace.juradm.fr',
             'Referer': 'https://sagace.juradm.fr/Authentification.aspx',
         }
 
         data = {
-            '__VIEWSTATE': 'dDwxNzk5NzM3NTQ0O3Q8O2w8aTwxPjs+O2w8dDw7bDxpPDM+Oz47bDx0PHA8O3A8bDxvbmNsaWNrOz47bDxBY3Rpb24oKVw7X19kb1Bvc3RCYWNrKCdpYk9rJywnJyk7Pj4+Ozs+Oz4+Oz4+O2w8aWJPazs+Pp2oOW5qmrkfhzTWTlSlhG/wNqqP',
-            '__VIEWSTATEGENERATOR': '5323A339',
+            '__VIEWSTATE': '/wEPDwULLTE1NTE4NDkxNjQPZBYCAgEPZBYCAgMPD2QWAh4Hb25jbGljawUgQWN0aW9uKCk7X19kb1Bvc3RCYWNrKCdpYk9rJywnJylkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBQRpYk9rqXmtB12mj9uUmm9kmptVyycImvikhFb10CfysBTnnKM=',
+            '__VIEWSTATEGENERATOR': '485AC012',
+            '__EVENTVALIDATION': '/wEdAAXSLsuptIuswQrdCTNuahyRg9RxSu3Vu7cDsvIlWIG+dRBAkDdsywjS0YnNj8VOZ9KTCd0U23v3NFv3G1TRsBun6096EZxc6ElGtLBK29KEGz3NxF3lB5oLioGvqq74fZ0nogrDIKt0MFfg3fEahdVs',
             'TxtJuridiction': court_id,
             'TxtDossier': lawsuit_id,
             'TxtAleaCle': lawsuit_password,
