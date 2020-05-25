@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+import re
 
 def get_text_for_lawsuit(court_id, lawsuit_id, lawsuit_password):
     soup = fetch_lawsuit_data(
@@ -41,10 +42,9 @@ def fetch_lawsuit_data(court_id, lawsuit_id, lawsuit_password):
         assert response.status_code == 302
 
         asp_net_session_id = response.headers['Set-Cookie'].split(';')[0]
-        assert 'persist=401v-80' in response.headers['Set-Cookie']
-        cookie = '{}; persist=401v-80'.format(asp_net_session_id)
+        assert re.match(r'^ASP\.NET_SessionId=[a-z0-9]+$', asp_net_session_id)
 
-        return cookie
+        return asp_net_session_id
 
     def send_request_2(cookie):
         headers = {
