@@ -41,6 +41,7 @@ def process_lawsuit(court_id, lawsuit_id, lawsuit_label, lawsuit_password):
 
     except FileNotFoundError:
         notify_new(
+            lawsuit_id=lawsuit_id,
             lawsuit_label=lawsuit_label,
             text=new_text,
         )
@@ -50,6 +51,7 @@ def process_lawsuit(court_id, lawsuit_id, lawsuit_label, lawsuit_password):
 
     if new_text != old_text:
         notify_change(
+            lawsuit_id=lawsuit_id,
             lawsuit_label=lawsuit_label,
             old_text=old_text,
             new_text=new_text,
@@ -67,14 +69,14 @@ def compute_diff(old_text, new_text):
     )
     return '\n'.join(diff)
 
-def notify_change(lawsuit_label, old_text, new_text):
+def notify_change(lawsuit_id, lawsuit_label, old_text, new_text):
     mail.send_mail(
-        subject='Lawsuit "{}" has been updated'.format(lawsuit_label),
+        subject='Lawsuit {} "{}" has been updated'.format(lawsuit_id, lawsuit_label),
         message=compute_diff(old_text, new_text),
     )
     
-def notify_new(lawsuit_label, text):
+def notify_new(lawsuit_id, lawsuit_label, text):
     mail.send_mail(
-        subject='New lawsuit "{}"'.format(lawsuit_label),
+        subject='New lawsuit {} "{}"'.format(lawsuit_id, lawsuit_label),
         message=text,
     )
